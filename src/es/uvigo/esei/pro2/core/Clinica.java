@@ -4,6 +4,10 @@
 
 package es.uvigo.esei.pro2.core;
 
+import com.sun.tools.internal.xjc.reader.xmlschema.BindingComponent;
+
+import java.util.*;
+
 /** Proyecto GESTCLINICA
  * @author nrufino - Modificaciones por adotsuarez
  */
@@ -37,13 +41,9 @@ public class Clinica {
     // CODIGO ======
     private String nombreClinica;
 
-    private Paciente[] pacientes;
-    private Medico[] medicos;
-    private CitaMedica[] citasMedicas;
-
-    private int numPacientes;
-    private int numMedicos;
-    private int numCitasMedicas;
+    private ArrayList <Paciente> pacientes;
+    private ArrayList <Medico> medicos;
+    private ArrayList <CitaMedica> citasMedicas;
 
     /** Nueva Clinica con un num. max. de pacientes.
      * @param maxPacientes el num. max. de pacientes, como entero.
@@ -54,13 +54,9 @@ public class Clinica {
     public Clinica(int maxPacientes, int maxMedicos, int maxCitasMedicas, String nombreClinica) {
         this.nombreClinica = nombreClinica;
 
-        numPacientes = 0;
-        numMedicos = 0;
-        numCitasMedicas = 0;
-
-        pacientes = new Paciente[maxPacientes];
-        medicos = new Medico[maxMedicos];
-        citasMedicas = new CitaMedica[maxCitasMedicas];
+        pacientes = new ArrayList<>(maxPacientes);
+        medicos = new ArrayList<>(maxMedicos);
+        citasMedicas = new ArrayList<>(maxCitasMedicas);
     }
 
     public String getNombreClinica() {
@@ -79,38 +75,24 @@ public class Clinica {
      */
     public Paciente getPaciente(int pos) throws Inexistente {
         if ( pos >= getNumPacientes() ) {
-            throw new Inexistente ("getPaciente(): sobrepasa la pos: " + ( pos + 1 ) + " / " + getMaxPacientes() );
+            throw new Inexistente ("getPaciente(): sobrepasa la pos: " + ( pos + 1 ) + " / " + getNumPacientes() );
         }
 
-        return pacientes[ pos ];
+        return pacientes.get(pos);
     }
 
     /** Devuelve el num. de pacientes creados.
      * @return el num. de pacientes existentes, como entero.
      */
     public int getNumPacientes() {
-        return numPacientes;
-    }
-
-    /** Devuelve el max. de numPacientes
-     * @return el num. de pacientes max, como entero
-     */
-    public int getMaxPacientes() {
-        return pacientes.length;
+        return pacientes.size();
     }
 
     /** Inserta un nuevo paciente
      * @param p el nuevo objeto Paciente
      */
     public void insertaPaciente(Paciente p) throws Overflow {
-        final int maxPacientes = getMaxPacientes();
-
-        if ( getNumPacientes() >= maxPacientes ) {
-            throw new Overflow("Demasiados pacientes");
-        }
-
-        pacientes[ numPacientes ] = p;
-        ++numPacientes;
+        pacientes.add(p);
     }
 
     /** Elimina un paciente
@@ -120,10 +102,11 @@ public class Clinica {
         if (pos >= getNumPacientes()) {
             throw new Inexistente("El paciente no exsite");
         }
-        if (tieneCitasPaciente(pacientes[pos])) {
+        if (tieneCitasPaciente(getPaciente(pos))) {
             throw new YaExisteCita("El paciente tiene citas");
         }
-        pacientes [ pos ] = pacientes [ --numPacientes ];
+
+        pacientes.remove(pos);
     }
 
     /** Comprueba si un paciente tiene citas
@@ -131,7 +114,7 @@ public class Clinica {
      */
     private boolean tieneCitasPaciente(Paciente p) {
         int i = 0;
-        while (i < getNumCitasMedicas() && !citasMedicas[i].getPaciente().equals(p)) {
+        while (i < getNumCitasMedicas() && !Objects.equals(citasMedicas.get(i).getPaciente(), p)) {
             i++;
         }
 
@@ -150,7 +133,7 @@ public class Clinica {
             for (int i = 0; i < numPacientes; i++) {
                 toret.append(i + 1)
                         .append(". ")
-                        .append(pacientes[i].toString())
+                        .append(pacientes.get(i).toString())
                         .append("\n");
             }
         } else {
@@ -170,38 +153,24 @@ public class Clinica {
      */
     public Medico getMedico(int pos) throws Inexistente  {
         if ( pos >= getNumMedicos() ) {
-            throw new Inexistente ("getMedico(): sobrepasa la pos: " + ( pos + 1 ) + " / " + getMaxMedicos() );
+            throw new Inexistente ("getMedico(): sobrepasa la pos: " + ( pos + 1 ) + " / " + getNumMedicos() );
         }
 
-        return medicos[ pos ];
+        return medicos.get(pos);
     }
 
     /** Devuelve el num. de medicos creados.
      * @return el num. de medicos existentes, como entero.
      */
     public int getNumMedicos() {
-        return numMedicos;
-    }
-
-    /** Devuelve el max. de numMedicos
-     * @return el num. de medicos max, como entero
-     */
-    public int getMaxMedicos() {
-        return medicos.length;
+        return medicos.size();
     }
 
     /** Inserta un nuevo medico
      * @param m el nuevo objeto Medico
      */
     public void insertaMedico(Medico m) throws Overflow {
-        final int maxMedicos = getMaxMedicos();
-
-        if ( getNumMedicos() >= maxMedicos ) {
-            throw new Overflow ("insertaMedico(): sobrepasa max.: " + getMaxMedicos() );
-        }
-
-        medicos[ numMedicos ] = m;
-        ++numMedicos;
+        medicos.add(m);
     }
 
     /** Elimina un medico
@@ -211,10 +180,10 @@ public class Clinica {
         if (pos >= getNumMedicos()) {
             throw new Inexistente("El medico no exsite");
         }
-        if (tieneCitasMedico(medicos[pos])) {
+        if (tieneCitasMedico(medicos.get(pos))) {
             throw new YaExisteCita("El medico tiene citas");
         }
-        medicos [ pos ] = medicos [ --numMedicos ];
+        medicos.remove(pos);
     }
 
     /** Comprueba si un medico tiene citas
@@ -222,7 +191,7 @@ public class Clinica {
      */
     private boolean tieneCitasMedico(Medico m) {
         int i = 0;
-        while (i < getNumCitasMedicas() && !citasMedicas[i].getMedico().equals(m)) {
+        while (i < getNumCitasMedicas() && !Objects.equals(citasMedicas.get(i).getMedico(), m)) {
             i++;
         }
 
@@ -240,7 +209,7 @@ public class Clinica {
             for (int i = 0; i < numMedicos; i++) {
                 toret.append(i + 1)
                         .append(". ")
-                        .append(medicos[i].toString())
+                        .append(medicos.get(i).toString())
                         .append("\n");
             }
         } else {
@@ -259,38 +228,24 @@ public class Clinica {
      */
     public CitaMedica getCitaMedica(int pos) throws Inexistente {
         if ( pos >= getNumCitasMedicas() ) {
-            throw new Inexistente ("getCitaMedica(): sobrepasa la pos: " + ( pos + 1 ) + " / " + getMaxCitasMedicas() );
+            throw new Inexistente ("getCitaMedica(): sobrepasa la pos: " + ( pos + 1 ) + " / " + getNumCitasMedicas() );
         }
 
-        return citasMedicas[ pos ];
+        return citasMedicas.get(pos);
     }
 
     /** Devuelve el num. de citas meicas creadas.
      * @return el num. de citas medicas existentes, como entero.
      */
     public int getNumCitasMedicas() {
-        return numCitasMedicas;
-    }
-
-    /** Devuelve el max. de numCitasMedicas
-     * @return el num. de citas medicas max, como entero
-     */
-    public int getMaxCitasMedicas() {
-        return citasMedicas.length;
+        return citasMedicas.size();
     }
 
     /** Inserta una nueva cita medica
      * @param cm el nuevo objeto CitaMedica
      */
     public void insertaCitaMedica(CitaMedica cm) throws Inexistente {
-        final int maxCitasMedicas = getMaxCitasMedicas();
-
-        if ( getNumCitasMedicas() >= maxCitasMedicas ) {
-            throw new Inexistente ("insertaCitasMedicas(): sobrepasa max.: " + getMaxCitasMedicas() );
-        }
-
-        citasMedicas[ numCitasMedicas ] = cm;
-        ++numCitasMedicas;
+        citasMedicas.add(cm);
     }
 
     /** Elimina una cita medica
@@ -298,9 +253,90 @@ public class Clinica {
      */
     public void eliminaCitaMedica(int pos) throws Inexistente {
         if ( pos >= getNumCitasMedicas() ) {
-            throw new Inexistente ("eliminaCitaMedica(): sobrepasa la pos: " + ( pos + 1 ) + " / " + getMaxCitasMedicas() );
+            throw new Inexistente ("eliminaCitaMedica(): sobrepasa la pos: " + ( pos + 1 ) + " / " + getNumCitasMedicas() );
         }
-        citasMedicas [ pos ] = citasMedicas [ --numCitasMedicas ];
+        citasMedicas.remove(pos);
+    }
+
+    /**
+     * Devuelve una lista de pacientes que tienen cita con un medico dado el num. colegiado
+     * @param numColegiado el numero de colegiado del medico a buscar
+     * @return Lista de pacientes asociados
+     */
+    public List<Paciente> obtenerPacientesCitaMedico(String numColegiado) throws Inexistente {
+        List <Paciente> lista = new ArrayList<>();
+        boolean found = false;
+
+        for (CitaMedica cm : citasMedicas) {
+            if (Objects.equals(cm.getMedico().getNumColegiado(), numColegiado)) {
+                lista.add(cm.getPaciente());
+                found = true;
+            }
+        }
+        if(!found){
+            throw new Inexistente("Ningun paciente asociado a ese num. colegiado (No existe medico o no tiene citas)");
+        }
+        return lista;
+    }
+
+    /**
+     * Devuelve un HashMap con
+     * @return HashMap de pacientes asociados
+     */
+    public HashMap<Paciente, List<String>> obtenerMedicosPaciente() throws Inexistente {
+
+        HashMap<Paciente, List<String>> map = new HashMap<>();
+        List<String> medicosEnCita;
+        Paciente pac;
+        String med;
+
+        if (!citasMedicas.isEmpty()) {
+            for (CitaMedica cm : citasMedicas) {
+                pac = cm.getPaciente();
+                med = cm.getMedico().getNumColegiado();
+                if (!map.containsKey(pac)) {
+                    medicosEnCita = new ArrayList<>(citasMedicas.size());
+                    medicosEnCita.add(med);
+                    map.put(pac,medicosEnCita);
+                } else {
+                    if (!map.get(pac).contains(med)) {
+                        map.get(pac).add(med);
+                    }
+                    // ??
+                }
+            }
+        } else {
+            throw new Inexistente("No existen citas");
+        }
+
+        return map;
+    }
+
+    /** Devuelve los medicos por orden de num. colegiado
+     * @return LinkedList con los medicos por orden de num. colegiado
+     */
+    public LinkedList orderedMedicos() throws Inexistente {
+        LinkedList<Medico> orderedMedicos = new LinkedList<>();
+        int pos;
+
+        if (!citasMedicas.isEmpty()) {
+            for (CitaMedica cm : citasMedicas) {
+                pos = 0;
+                if (!orderedMedicos.contains(cm.getMedico())) {
+                    while ((pos < orderedMedicos.size())
+                            && (orderedMedicos.get(pos).getNumColegiado().compareToIgnoreCase(cm.getMedico().getNumColegiado()) <= -1)) {
+                        pos++;
+                    }
+
+                    if (pos == orderedMedicos.size()) {
+                        orderedMedicos.add(cm.getMedico());
+                    } else if (Objects.equals(orderedMedicos.get(pos), cm.getMedico())) {
+                        orderedMedicos.add(pos,cm.getMedico());
+                    }
+                }
+            }
+        }
+        return orderedMedicos;
     }
 
     /** Imprime todas las citasMedicas
@@ -315,7 +351,7 @@ public class Clinica {
             for (int i = 0; i < numCitasMedicas; i++) {
                 toret.append(i + 1)
                         .append(". ")
-                        .append(citasMedicas[i].toString())
+                        .append(citasMedicas.get(i).toString())
                         .append("\n");
             }
         } else {

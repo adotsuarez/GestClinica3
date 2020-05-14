@@ -36,7 +36,7 @@ public class Externo extends Medico {
         if (isEspecialidad()) {
             sb.append("- Es especialista\n");
         }
-        sb.append(" - Incorporacion: ").append(getIncorporacion().toString());
+        sb.append("- Incorporacion: ").append(getIncorporacion().toString());
         sb.append(super.toString());
         return sb.toString();
     }

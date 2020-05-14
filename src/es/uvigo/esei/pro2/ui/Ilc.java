@@ -2,7 +2,10 @@ package es.uvigo.esei.pro2.ui;
 
 import es.uvigo.esei.pro2.core.*;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 /** Proyecto GESTCLINICA
  * @author nrufino - Modificaciones por @adotsuarez
@@ -35,9 +38,9 @@ public class Ilc {
         int op;
 
         // Lee el num. max. de los vectores
-        int maxPacientes = leeNum( "Num. max. pacientes: " );
-        int maxMedicos = leeNum( "Num. max. medicos: " );
-        int maxCitasMedicas = leeNum( "Num. max. citas medicas: " );
+        int maxPacientes = leeNum( "Num. pacientes estimado: " );
+        int maxMedicos = leeNum( "Num. medicos estimado: " );
+        int maxCitasMedicas = leeNum( "Num. citas medicas estimado: " );
         String nombreClinica = leeString("Nombre de la clinica: ");
 
 
@@ -135,6 +138,12 @@ public class Ilc {
                                         visualizaCitasMedicasExternos(coleccion);
                                         break;
                                     case 6:
+                                        listarPacientesCitaMedico(coleccion);
+                                        break;
+                                    case 7:
+                                        listarMedicosPaciente(coleccion);
+                                        break;
+                                    case 8:
                                         // VOLVER
                                         break;
                                     default:
@@ -144,7 +153,7 @@ public class Ilc {
                             } catch (Exception e) {
                                 System.err.println("\nERROR: " + e.getMessage());
                             }
-                        } while (op != 5);
+                        } while (op != 8);
                         break;
                     case 4:
                         // SALIR
@@ -197,7 +206,7 @@ public class Ilc {
             System.out.println("GESTIÓN PACIENTES:\n"
                                 + "Número de pacientes: "
                                 + coleccion.getNumPacientes()
-                                + " / " + coleccion.getMaxPacientes());
+                                + " / " + coleccion.getNumPacientes());
             System.out.println(
                               "\n1. Inserta un nuevo paciente\n"
                             + "2. Modifica un paciente\n"
@@ -253,11 +262,13 @@ public class Ilc {
                             + "2. Modifica una cita médica\n"
                             + "3. Elimina una cita médica\n"
                             + "4. Listar citas médicas\n"
-                            + "5. Citas médicos externos <EXAMEN>\n"
-                            + "6. Volver al menu principal\n");
+                            + "5. Citas medicos externos <Examen GestClinica2>\n"
+                            + "6. Pacientes con citas medicas dado un medico (num. colegiado)\n"
+                            + "7. Listar todos los pacientes con sus medicos asociados\n"
+                            + "8. Volver al menu principal\n");
             toret = leeNum( "Selecciona: " );
         } while( toret < 1
-                || toret > 6 );
+                || toret > 8 );
 
         System.out.println();
         return toret;
@@ -721,7 +732,7 @@ public class Ilc {
 
     /**
      * Visualiza los medicos almacenados en la coleccion por la salida std.
-     * @param coleccion El objeto Clinica del que visualizar sus pacientes.
+     * @param coleccion El objeto Clinica del que visualizar sus medicos.
      */
     private void visualizaMedicos(Clinica coleccion) throws Clinica.Inexistente {
         final int numMedicos = coleccion.getNumMedicos();
@@ -843,7 +854,7 @@ public class Ilc {
 
     /**
      * Visualiza las citas medicas almacenadas en la coleccion por la salida std.
-     * @param coleccion El objeto Clinica del que visualizar sus pacientes.
+     * @param coleccion El objeto Clinica del que visualizar sus citas medicas.
      */
     private void visualizaCitasMedicas(Clinica coleccion) throws Clinica.Inexistente {
         final int numCitasMedicas = coleccion.getNumCitasMedicas();
@@ -861,7 +872,7 @@ public class Ilc {
 
     /**
      * Visualiza las citas medicas almacenadas en la coleccion por la salida std.
-     * @param coleccion El objeto Clinica del que visualizar sus pacientes.
+     * @param coleccion El objeto Clinica del que visualizar sus citas medicas.
      */
     private void visualizaCitasMedicasExternos(Clinica coleccion) throws Clinica.Inexistente {
         final int numCitasMedicas = coleccion.getNumCitasMedicas();
@@ -887,6 +898,52 @@ public class Ilc {
             System.out.println( "No hay ninguna cita médica." );
         }
 
+    }
+
+    /**
+     * Visualiza las citas medicas asociadas a un medico (num. colegiado) pedido
+     * @param coleccion El objeto Clinica del que visualizar sus citas medicas.
+     */
+    public void listarPacientesCitaMedico(Clinica coleccion) throws Clinica.Inexistente {
+        String info = leeString("Num. colegiado: ");
+        List<Paciente> lista = coleccion.obtenerPacientesCitaMedico(info);
+
+        StringBuilder sb = new StringBuilder();
+
+        for (Paciente paciente : lista) {
+            sb.append(paciente.getNombre()).append("\n");
+        }
+
+        System.out.println(sb.toString());
+    }
+
+    /**
+     * Visualiza las citas medicas asociadas a cada paciente
+     * @param coleccion El objeto Clinica del que visualizar sus citas medicas.
+     */
+    public void listarMedicosPaciente(Clinica coleccion) throws Clinica.Inexistente {
+        HashMap<Paciente, List<String>> lista = coleccion.obtenerMedicosPaciente();
+        Set<Paciente> pacienteSet = lista.keySet();
+        List<String> medicosList;
+
+        StringBuilder sb = new StringBuilder();
+
+        if (!lista.isEmpty()) {
+            sb.append("Medicos con cita por cada paciente:\n");
+            for (Paciente pac : pacienteSet) {
+                sb.append("Paciente: ")
+                        .append(pac.toString())
+                        .append("\n --> Medicos con cita para este paciente:");
+
+                medicosList = lista.get(pac);
+                for (String str : medicosList) {
+                    sb.append("     >>").append(str);
+                }
+            }
+        } else {
+            sb.append("No hay citas.");
+        }
+        System.out.println(sb.toString());
     }
 
 }
