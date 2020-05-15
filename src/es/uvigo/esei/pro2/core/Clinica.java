@@ -159,6 +159,21 @@ public class Clinica {
         return medicos.get(pos);
     }
 
+    /**
+     * Devuelve si un medico existe dado un num. colegiado
+     * @param nc el numero de colegiado
+     * @return true: existe
+     *         false: no existe
+     */
+    public boolean existeColegiado(String nc){
+        int i =0;
+
+        while(i<this.getNumMedicos() && !medicos.get(i).getNumColegiado().equals(nc)){
+            i++;
+        }
+        return(i!=this.getNumMedicos());
+    }
+
     /** Devuelve el num. de medicos creados.
      * @return el num. de medicos existentes, como entero.
      */
@@ -263,49 +278,50 @@ public class Clinica {
      * @param numColegiado el numero de colegiado del medico a buscar
      * @return Lista de pacientes asociados
      */
-    public List<Paciente> obtenerPacientesCitaMedico(String numColegiado) throws Inexistente {
-        List <Paciente> lista = new ArrayList<>();
-        boolean found = false;
+    public ArrayList obtenerPacientesCitaMedico ( String numColegiado )throws Inexistente {
+        ArrayList <String> nombresPacientes;
 
-        for (CitaMedica cm : citasMedicas) {
-            if (Objects.equals(cm.getMedico().getNumColegiado(), numColegiado)) {
-                lista.add(cm.getPaciente());
-                found = true;
+        if(!existeColegiado(numColegiado)){
+            throw new Inexistente("Ningun médico con ese numero de colegiado (" + numColegiado + ")\n");
+        }
+
+        nombresPacientes=new ArrayList<>(getNumCitasMedicas());
+
+        for(CitaMedica cm: citasMedicas){
+            if (cm.getMedico().getNumColegiado().equals(numColegiado)) {
+                if (!nombresPacientes.contains(cm.getPaciente().getNombre())) {
+                    nombresPacientes.add(cm.getPaciente().getNombre());
+                }
             }
         }
-        if(!found){
-            throw new Inexistente("Ningun paciente asociado a ese num. colegiado (No existe medico o no tiene citas)");
-        }
-        return lista;
+        return nombresPacientes;
     }
 
     /**
      * Devuelve un HashMap con
      * @return HashMap de pacientes asociados
      */
-    public HashMap<Paciente, List<String>> obtenerMedicosPaciente() throws Inexistente {
-
+    public HashMap obtenerMedicosPacientes() throws Inexistente {
         HashMap<Paciente, List<String>> map = new HashMap<>();
         List<String> medicosEnCita;
         Paciente pac;
         String med;
 
-        if (!citasMedicas.isEmpty()) {
-            for (CitaMedica cm : citasMedicas) {
+        if(!citasMedicas.isEmpty()){
+            for(CitaMedica cm: citasMedicas){
                 pac = cm.getPaciente();
                 med = cm.getMedico().getNumColegiado();
                 if (!map.containsKey(pac)) {
-                    medicosEnCita = new ArrayList<>(citasMedicas.size());
+                    medicosEnCita= new ArrayList<>(citasMedicas.size());
                     medicosEnCita.add(med);
-                    map.put(pac,medicosEnCita);
+                    map.put(pac, medicosEnCita);
                 } else {
                     if (!map.get(pac).contains(med)) {
                         map.get(pac).add(med);
                     }
-                    // ??
                 }
             }
-        } else {
+        }else {
             throw new Inexistente("No existen citas");
         }
 
@@ -315,28 +331,47 @@ public class Clinica {
     /** Devuelve los medicos por orden de num. colegiado
      * @return LinkedList con los medicos por orden de num. colegiado
      */
-    public LinkedList orderedMedicos() throws Inexistente {
-        LinkedList<Medico> orderedMedicos = new LinkedList<>();
+    public List orderedMedicos(){
+        List<Medico> medOrdenados = new LinkedList<>();
         int pos;
+        Medico med;
 
-        if (!citasMedicas.isEmpty()) {
-            for (CitaMedica cm : citasMedicas) {
-                pos = 0;
-                if (!orderedMedicos.contains(cm.getMedico())) {
-                    while ((pos < orderedMedicos.size())
-                            && (orderedMedicos.get(pos).getNumColegiado().compareToIgnoreCase(cm.getMedico().getNumColegiado()) <= -1)) {
+        if(!citasMedicas.isEmpty()){
+            for(CitaMedica cm : citasMedicas){
+                med = cm.getMedico();
+                if (!medOrdenados.contains(med)) {
+                    pos = 0;
+                    while ((pos < medOrdenados.size())
+                            && (medOrdenados.get(pos).getNumColegiado().compareTo(med.getNumColegiado()))< med.getNumColegiado().charAt(pos)){
                         pos++;
                     }
-
-                    if (pos == orderedMedicos.size()) {
-                        orderedMedicos.add(cm.getMedico());
-                    } else if (Objects.equals(orderedMedicos.get(pos), cm.getMedico())) {
-                        orderedMedicos.add(pos,cm.getMedico());
+                    if (pos == medOrdenados.size()) {
+                        medOrdenados.add(med);
+                    } else if (!medOrdenados.get(pos).equals(med)) {
+                        medOrdenados.add(pos,med);
                     }
                 }
             }
         }
-        return orderedMedicos;
+        return medOrdenados;
+    }
+
+    // EXAMEN GESTCLINICA3 - B3
+    /** Devuelve ##########################
+     * @return ###############
+     */
+    public Set examen() throws Inexistente {
+        Set<String> pacientes = new HashSet<>();
+
+        if (!citasMedicas.isEmpty()) {
+            for (CitaMedica cm : citasMedicas) {
+
+            }
+        } else {
+            throw new Inexistente("No existen citas");
+        }
+
+        return pacientes;
     }
 
     /** Imprime todas las citasMedicas

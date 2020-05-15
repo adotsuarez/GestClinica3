@@ -2,10 +2,7 @@ package es.uvigo.esei.pro2.ui;
 
 import es.uvigo.esei.pro2.core.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 /** Proyecto GESTCLINICA
  * @author nrufino - Modificaciones por @adotsuarez
@@ -144,6 +141,12 @@ public class Ilc {
                                         listarMedicosPaciente(coleccion);
                                         break;
                                     case 8:
+                                        listarOrderedMedicos(coleccion);
+                                        break;
+                                    case 9:
+                                        // llamada a método de la prueba;
+                                        break;
+                                    case 10:
                                         // VOLVER
                                         break;
                                     default:
@@ -205,8 +208,7 @@ public class Ilc {
         do {
             System.out.println("GESTIÓN PACIENTES:\n"
                                 + "Número de pacientes: "
-                                + coleccion.getNumPacientes()
-                                + " / " + coleccion.getNumPacientes());
+                                + coleccion.getNumPacientes());
             System.out.println(
                               "\n1. Inserta un nuevo paciente\n"
                             + "2. Modifica un paciente\n"
@@ -263,12 +265,14 @@ public class Ilc {
                             + "3. Elimina una cita médica\n"
                             + "4. Listar citas médicas\n"
                             + "5. Citas medicos externos <Examen GestClinica2>\n"
-                            + "6. Pacientes con citas medicas dado un medico (num. colegiado)\n"
+                            + "6. Pacientes con citas medicas dado un num. colegiado\n"
                             + "7. Listar todos los pacientes con sus medicos asociados\n"
-                            + "8. Volver al menu principal\n");
+                            + "8. Listar todos los medicos ordenados por num. colegiado\n"
+                            + "9. ####### <Examen GestClinica3>\n"
+                            + "10. Volver al menu principal\n");
             toret = leeNum( "Selecciona: " );
         } while( toret < 1
-                || toret > 8 );
+                || toret > 9 );
 
         System.out.println();
         return toret;
@@ -905,15 +909,23 @@ public class Ilc {
      * @param coleccion El objeto Clinica del que visualizar sus citas medicas.
      */
     public void listarPacientesCitaMedico(Clinica coleccion) throws Clinica.Inexistente {
-        String info = leeString("Num. colegiado: ");
-        List<Paciente> lista = coleccion.obtenerPacientesCitaMedico(info);
+        String numcol;
+        ArrayList<String> pacs;
 
         StringBuilder sb = new StringBuilder();
 
-        for (Paciente paciente : lista) {
-            sb.append(paciente.getNombre()).append("\n");
-        }
+        numcol = leeString("Introduce el número de colegiado: ");
+        pacs = coleccion.obtenerPacientesCitaMedico(numcol);
 
+        if(pacs.isEmpty()){
+            sb.append("El médico (").append(numcol).append(") no tiene ninguna cita.");
+        }else{
+            sb.append("Los pacientes que tienen citas médicas con el médico (")
+                    .append(numcol).append(") son: \n");
+            for(String p: pacs){
+                sb.append("\n · ").append(p).append("\n");
+            }
+        }
         System.out.println(sb.toString());
     }
 
@@ -922,7 +934,7 @@ public class Ilc {
      * @param coleccion El objeto Clinica del que visualizar sus citas medicas.
      */
     public void listarMedicosPaciente(Clinica coleccion) throws Clinica.Inexistente {
-        HashMap<Paciente, List<String>> lista = coleccion.obtenerMedicosPaciente();
+        HashMap<Paciente, List<String>> lista = coleccion.obtenerMedicosPacientes();
         Set<Paciente> pacienteSet = lista.keySet();
         List<String> medicosList;
 
@@ -931,19 +943,37 @@ public class Ilc {
         if (!lista.isEmpty()) {
             sb.append("Medicos con cita por cada paciente:\n");
             for (Paciente pac : pacienteSet) {
-                sb.append("Paciente: ")
+                sb.append(" · Paciente: ")
                         .append(pac.toString())
                         .append("\n --> Medicos con cita para este paciente:");
 
                 medicosList = lista.get(pac);
-                for (String str : medicosList) {
-                    sb.append("     >>").append(str);
+                for (String numcol : medicosList) {
+                    sb.append(" ···> ").append(numcol);
                 }
             }
         } else {
             sb.append("No hay citas.");
         }
         System.out.println(sb.toString());
+    }
+
+    /**
+     * Visualiza los medicos ordenados por num. colegiado
+     * @param coleccion El objeto Clinica del que visualizar sus citas medicas.
+     */
+    public String listarOrderedMedicos(Clinica coleccion) {
+        StringBuilder sb = new StringBuilder();
+        List<Medico> lista = coleccion.orderedMedicos();
+
+        if(!lista.isEmpty()){
+            sb.append("Medicos con citas (ordenados por num. colegiado):");
+            for (Medico m : lista) {
+                sb.append("\n · ").append(m.toString());
+            }
+        }else {
+            sb.append("No hay citas.");
+        }return sb.toString();
     }
 
 }
