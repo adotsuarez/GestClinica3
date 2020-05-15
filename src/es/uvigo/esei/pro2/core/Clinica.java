@@ -4,8 +4,6 @@
 
 package es.uvigo.esei.pro2.core;
 
-import com.sun.tools.internal.xjc.reader.xmlschema.BindingComponent;
-
 import java.util.*;
 
 /** Proyecto GESTCLINICA
@@ -357,21 +355,25 @@ public class Clinica {
     }
 
     // EXAMEN GESTCLINICA3 - B3
-    /** Devuelve ##########################
-     * @return ###############
+    /** Devuelve el conjunto de medicos que tienen citas con pacientes privados
+     * @return Set de medicos con citas con pac. privados
      */
-    public Set examen() throws Inexistente {
-        Set<String> pacientes = new HashSet<>();
+    public Set obtenerMedicosPacientesPrivados() throws Inexistente {
+        Set<String> medicos = new HashSet<>();
 
         if (!citasMedicas.isEmpty()) {
             for (CitaMedica cm : citasMedicas) {
-
+                if(cm.getPaciente() instanceof Privado) {
+                    if(!medicos.contains(cm.getMedico().getNumColegiado())) {
+                        medicos.add(cm.getMedico().getNumColegiado());
+                    }
+                }
             }
         } else {
             throw new Inexistente("No existen citas");
         }
 
-        return pacientes;
+        return medicos;
     }
 
     /** Imprime todas las citasMedicas

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6a6b7ee4-abe4-41d1-ab75-08f73d7022ca" name="Default Changelist" comment="">
+    <list default="true" id="6a6b7ee4-abe4-41d1-ab75-08f73d7022ca" name="Default Changelist" comment="Examen">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/es/uvigo/esei/pro2/core/Clinica.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/es/uvigo/esei/pro2/core/Clinica.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/es/uvigo/esei/pro2/ui/Ilc.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/es/uvigo/esei/pro2/ui/Ilc.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/es/uvigo/esei/pro2/ui/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/es/uvigo/esei/pro2/ui/Main.java" afterDir="false" />
@@ -69,7 +70,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1589475553496</updated>
-      <workItem from="1589475559257" duration="17298000" />
+      <workItem from="1589475559257" duration="19916000" />
     </task>
     <task id="LOCAL-00001" summary="Arranque y primeros cambios P3.">
       <created>1589496499317</created>
@@ -78,7 +79,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589496499317</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Preparación para examen y ejercicios B3 (1 al 4)">
+      <created>1589531618941</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1589531618941</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -86,33 +94,35 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Arranque y primeros cambios P3." />
-    <option name="LAST_COMMIT_MESSAGE" value="Arranque y primeros cambios P3." />
+    <MESSAGE value="Preparación para examen y ejercicios B3 (1 al 4)" />
+    <MESSAGE value="Examen" />
+    <option name="LAST_COMMIT_MESSAGE" value="Examen" />
   </component>
   <component name="WindowStateProjectService">
     <state x="-1497" y="-583" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589494469000">
       <screen x="-1920" y="-784" width="1920" height="1080" />
     </state>
     <state x="-1497" y="-583" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.800/-1920.-784.1920.1080@-1920.-784.1920.1080" timestamp="1589494469000" />
-    <state x="-1350" y="-643" key="CommitChangelistDialog2" timestamp="1589496498818">
+    <state x="-1350" y="-643" key="CommitChangelistDialog2" timestamp="1589535779460">
       <screen x="-1920" y="-784" width="1920" height="1080" />
     </state>
-    <state x="-1350" y="-643" key="CommitChangelistDialog2/0.0.1280.800/-1920.-784.1920.1080@-1920.-784.1920.1080" timestamp="1589496498818" />
-    <state width="1876" height="304" key="GridCell.Tab.0.bottom" timestamp="1589530894345">
+    <state x="-1350" y="-643" key="CommitChangelistDialog2/0.0.1280.800/-1920.-784.1920.1080@-1920.-784.1920.1080" timestamp="1589535779460" />
+    <state width="1876" height="304" key="GridCell.Tab.0.bottom" timestamp="1589535711056">
       <screen x="-1920" y="-784" width="1920" height="1080" />
     </state>
-    <state width="1876" height="304" key="GridCell.Tab.0.bottom/0.0.1280.800/-1920.-784.1920.1080@-1920.-784.1920.1080" timestamp="1589530894345" />
-    <state width="1876" height="304" key="GridCell.Tab.0.center" timestamp="1589530894340">
+    <state width="1876" height="304" key="GridCell.Tab.0.bottom/0.0.1280.800/-1920.-784.1920.1080@-1920.-784.1920.1080" timestamp="1589535711056" />
+    <state width="1876" height="304" key="GridCell.Tab.0.center" timestamp="1589535711054">
       <screen x="-1920" y="-784" width="1920" height="1080" />
     </state>
-    <state width="1876" height="304" key="GridCell.Tab.0.center/0.0.1280.800/-1920.-784.1920.1080@-1920.-784.1920.1080" timestamp="1589530894340" />
-    <state width="1876" height="304" key="GridCell.Tab.0.left" timestamp="1589530894339">
+    <state width="1876" height="304" key="GridCell.Tab.0.center/0.0.1280.800/-1920.-784.1920.1080@-1920.-784.1920.1080" timestamp="1589535711054" />
+    <state width="1876" height="304" key="GridCell.Tab.0.left" timestamp="1589535711053">
       <screen x="-1920" y="-784" width="1920" height="1080" />
     </state>
-    <state width="1876" height="304" key="GridCell.Tab.0.left/0.0.1280.800/-1920.-784.1920.1080@-1920.-784.1920.1080" timestamp="1589530894339" />
-    <state width="1876" height="304" key="GridCell.Tab.0.right" timestamp="1589530894344">
+    <state width="1876" height="304" key="GridCell.Tab.0.left/0.0.1280.800/-1920.-784.1920.1080@-1920.-784.1920.1080" timestamp="1589535711053" />
+    <state width="1876" height="304" key="GridCell.Tab.0.right" timestamp="1589535711055">
       <screen x="-1920" y="-784" width="1920" height="1080" />
     </state>
-    <state width="1876" height="304" key="GridCell.Tab.0.right/0.0.1280.800/-1920.-784.1920.1080@-1920.-784.1920.1080" timestamp="1589530894344" />
+    <state width="1876" height="304" key="GridCell.Tab.0.right/0.0.1280.800/-1920.-784.1920.1080@-1920.-784.1920.1080" timestamp="1589535711055" />
     <state width="1876" height="374" key="GridCell.Tab.1.bottom" timestamp="1589495380568">
       <screen x="-1920" y="-784" width="1920" height="1080" />
     </state>
@@ -138,10 +148,10 @@
       <screen x="-1920" y="-784" width="1920" height="1080" />
     </state>
     <state x="-1231" y="-495" width="540" height="524" key="StructurePopup/0.0.1280.800/-1920.-784.1920.1080@-1920.-784.1920.1080" timestamp="1589486505785" />
-    <state x="-1361" y="-505" key="Vcs.Push.Dialog.v2" timestamp="1589496502243">
+    <state x="-1361" y="-505" key="Vcs.Push.Dialog.v2" timestamp="1589531624651">
       <screen x="-1920" y="-784" width="1920" height="1080" />
     </state>
-    <state x="-1361" y="-505" key="Vcs.Push.Dialog.v2/0.0.1280.800/-1920.-784.1920.1080@-1920.-784.1920.1080" timestamp="1589496502243" />
+    <state x="-1361" y="-505" key="Vcs.Push.Dialog.v2/0.0.1280.800/-1920.-784.1920.1080@-1920.-784.1920.1080" timestamp="1589531624651" />
     <state x="-1280" y="-487" width="639" height="486" key="find.popup" timestamp="1589475738032">
       <screen x="-1920" y="-784" width="1920" height="1080" />
     </state>

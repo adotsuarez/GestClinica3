@@ -144,9 +144,9 @@ public class Ilc {
                                         listarOrderedMedicos(coleccion);
                                         break;
                                     case 9:
-                                        // llamada a método de la prueba;
+                                        listarMedicosPacientesPrivados(coleccion);
                                         break;
-                                    case 10:
+                                    case 0:
                                         // VOLVER
                                         break;
                                     default:
@@ -156,7 +156,7 @@ public class Ilc {
                             } catch (Exception e) {
                                 System.err.println("\nERROR: " + e.getMessage());
                             }
-                        } while (op != 8);
+                        } while (op != 0);
                         break;
                     case 4:
                         // SALIR
@@ -268,10 +268,10 @@ public class Ilc {
                             + "6. Pacientes con citas medicas dado un num. colegiado\n"
                             + "7. Listar todos los pacientes con sus medicos asociados\n"
                             + "8. Listar todos los medicos ordenados por num. colegiado\n"
-                            + "9. ####### <Examen GestClinica3>\n"
-                            + "10. Volver al menu principal\n");
+                            + "9. Listar todos los medicos que tenga citas con pacientes privados <Examen GestClinica3>\n"
+                            + "0. Volver al menu principal\n");
             toret = leeNum( "Selecciona: " );
-        } while( toret < 1
+        } while( toret < 0
                 || toret > 9 );
 
         System.out.println();
@@ -962,7 +962,7 @@ public class Ilc {
      * Visualiza los medicos ordenados por num. colegiado
      * @param coleccion El objeto Clinica del que visualizar sus citas medicas.
      */
-    public String listarOrderedMedicos(Clinica coleccion) {
+    public void listarOrderedMedicos(Clinica coleccion) {
         StringBuilder sb = new StringBuilder();
         List<Medico> lista = coleccion.orderedMedicos();
 
@@ -973,7 +973,30 @@ public class Ilc {
             }
         }else {
             sb.append("No hay citas.");
-        }return sb.toString();
+        }
+
+        System.out.println(sb.toString());
+    }
+
+    // EXAMEN GESTCLINICA3 - B3
+    /**
+     * Visualiza los medicos ordenados por num. colegiado
+     * @param coleccion El objeto Clinica del que visualizar sus citas medicas.
+     */
+    public void listarMedicosPacientesPrivados(Clinica coleccion) throws Clinica.Inexistente {
+        StringBuilder sb = new StringBuilder();
+        Set<String> medicos = coleccion.obtenerMedicosPacientesPrivados();
+
+
+        if(!medicos.isEmpty()){
+            sb.append("Medicos con citas con pacientes privados:");
+            for (String m : medicos) {
+                sb.append("\n · ").append(m);
+            }
+        }else {
+            sb.append("No hay medicos con pacientes privados asignados en este momento.");
+        }
+        System.out.println(sb.toString());
     }
 
 }
